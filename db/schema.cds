@@ -3,6 +3,8 @@ namespace mydb;
 using {managed,cuid} from '@sap/cds/common';
 
 
+annotate PurchaseOrders with { modifiedAt @odata.etag }
+
 entity Products {
     key ProductID       : Integer;
         ProductName     : String(255);

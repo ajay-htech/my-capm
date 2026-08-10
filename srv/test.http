@@ -1,0 +1,26 @@
+### Create Purchase Order
+PATCH http://localhost:4004/odata/v4/product-service-v2/PurchaseOrders/e9bd227a-6e0e-4445-93a0-03d002c245c8
+Content-Type: application/json
+If-Match: W/"2026-08-10T09:08:26.311Z"
+
+{
+  "CustomerID": "C1000",
+  "TotalAmount": 5000,
+  "PoToOiderItems": [
+    {
+      "ProductID": 10,
+      "ProductName": "Laptop",
+      "Quantity": 2,
+      "UnitPrice": 2000
+    },
+    {
+      "ProductID": 20,
+      "ProductName": "Mouse",
+      "Quantity": 5,
+      "UnitPrice": 200
+    }
+  ]
+}
+
+###
+get http://localhost:4004/odata/v4/product-service-v2/PurchaseOrders/e9bd227a-6e0e-4445-93a0-03d002c245c8
