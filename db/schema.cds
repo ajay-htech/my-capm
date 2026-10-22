@@ -1,91 +1,111 @@
 namespace mydb;
 
-using {managed,cuid} from '@sap/cds/common';
+using {
+    managed,
+    cuid
+} from '@sap/cds/common';
 
-
-annotate PurchaseOrders with { modifiedAt @odata.etag }
+annotate PurchaseOrders with {
+    modifiedAt @odata.etag;
+};
 
 entity Products {
-    key ProductID       : Integer;
-        ProductName     : String(255);
-        CategoryID      : Integer;
-        SupplierID      : Integer;
-        QuantityPerUnit : String(100);
-        UnitPrice       : Double;
-        UnitsInStock    : Integer;
-        UnitsOnOrder    : Integer;
-        ReorderLevel    : Integer;
-        Discontinued    : Boolean;
+    key productId       : Integer;
+        productName     : String(255);
+        categoryId      : Integer;
+        supplierId      : Integer;
+        quantityPerUnit : String(100);
+        unitPrice       : Double;
+        unitsInStock    : Integer;
+        unitsOnOrder    : Integer;
+        reorderLevel    : Integer;
+        discontinued    : Boolean;
 }
 
 entity Customers {
-    key CustomerID   : String(10);
-        CompanyName  : String(255);
-        ContactName  : String(255);
-        ContactTitle : String(100);
-        Address      : String(255);
-        City         : String(100);
-        Region       : String(100);
-        PostalCode   : String(20);
-        Country      : String(100);
-        Phone        : String(50);
-        Fax          : String(50);
+    key customerId   : String(10);
+        companyName  : String(255);
+        contactName  : String(255);
+        contactTitle : String(100);
+        address      : String(255);
+        city         : String(100);
+        region       : String(100);
+        postalCode   : String(20);
+        country      : String(100);
+        phone        : String(50);
+        fax          : String(50);
 }
 
 entity Employees {
-    key EmployeeID      : Integer;
-        FirstName       : String(100);
-        LastName        : String(100);
-        Title           : String(100);
-        TitleOfCourtesy : String(50);
-        BirthDate       : Date;
-        HireDate        : Date;
-        Address         : String(255);
-        City            : String(100);
-        Region          : String(100);
-        PostalCode      : String(20);
-        Country         : String(100);
-        HomePhone       : String(50);
-        Extension       : String(20);
-        PhotoPath       : String(500);
-        Notes           : LargeString;
-        ReportsTo       : Integer;
+    key employeeId      : Integer;
+        firstName       : String(100);
+        lastName        : String(100);
+        title           : String(100);
+        titleOfCourtesy : String(50);
+        birthDate       : Date;
+        hireDate        : Date;
+        address         : String(255);
+        city            : String(100);
+        region          : String(100);
+        postalCode      : String(20);
+        country         : String(100);
+        homePhone       : String(50);
+        extension       : String(20);
+        photoPath       : String(500);
+        notes           : LargeString;
+        reportsTo       : Integer;
 }
 
 entity PurchaseOrders : managed {
-    key PurchaseOrderID : UUID;
-        CustomerID      : String(10);
-        TotalAmount     : Double;
-        PoToOiderItems  : Composition of many OrderItems
-                              on PoToOiderItems.PurchaseOrderID = PurchaseOrderID;
+    key purchaseOrderId : UUID;
+
+        customerId      : String(10);
+        totalAmount     : Double;
+        approvalStatus  : String;
+
+        orderItems      : Composition of many OrderItems
+                              on orderItems.purchaseOrderId = purchaseOrderId;
+
+        approvals       : Composition of many ApprovalTable
+                              on approvals.purchaseOrderId = purchaseOrderId;
 }
 
 entity OrderItems {
-    key OrderItemID       : UUID;
-        PurchaseOrderID   : UUID;
-        ProductID         : Integer;
-        ProductName       : String;
-        Quantity          : Integer;
-        UnitPrice         : Double;
-        OitoPurchaseOrder : Association to PurchaseOrders
-                                on OitoPurchaseOrder.PurchaseOrderID = PurchaseOrderID;
-        OiToProducts      : Association to one Products
-                                on OiToProducts.ProductID = ProductID;
+    key purchaseOrderId : UUID;
+    key productId       : Integer;
+        productName     : String;
+        quantity        : Integer;
+        unitPrice       : Double;
+        itemTotal       : Double;
+        purchaseOrder   : Association to PurchaseOrders
+                              on purchaseOrder.purchaseOrderId = purchaseOrderId;
+
+        product         : Association to one Products
+                              on product.productId = productId;
 }
 
+entity ApprovalTable : cuid {
+    approvalLevel   : Integer;
+    approver        : String;
+    respondedOn     : DateTime;
+    purchaseOrderId : UUID;
+    remarks         : String(1000);
 
+    purchaseOrder   : Association to one PurchaseOrders
+                          on purchaseOrder.purchaseOrderId = purchaseOrderId;
+}
 
 entity Attachments : cuid, managed {
 
-    fileName        : String(255);
+    fileName      : String(255);
 
-    mimeType        : String(100);
+    mimeType      : String(100);
 
-    fileSize        : Integer;
+    fileSize      : Integer;
 
-    content         : LargeBinary
-        @Core.MediaType : mimeType
-        @Core.ContentDisposition.Filename : fileName;
+    content       : LargeBinary
+    @Core.MediaType                  : mimeType
+    @Core.ContentDisposition.Filename: fileName;
 
-    purchaseOrder   : Association to PurchaseOrders;
+    purchaseOrder : Association to PurchaseOrders;
 }

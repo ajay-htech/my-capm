@@ -119,7 +119,7 @@
           "name": "sap.fe.templates.ListReport",
           "options": {
             "settings": {
-          "enhanceI18n" : "i18n/polist.properties",
+              "enhanceI18n": "i18n/polist.properties",
               "contextPath": "/PurchaseOrders",
               "variantManagement": "Page",
               "navigation": {
@@ -151,6 +151,18 @@
                 "PoToOiderItems": {
                   "detail": {
                     "route": "OrderItemsObjectPage"
+                  }
+                }
+              },
+              "controlConfiguration": {
+                "orderItems/@com.sap.vocabularies.UI.v1.LineItem#ItemsSection": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
+                  }
+                },
+                "approvals/@com.sap.vocabularies.UI.v1.LineItem#ApproversTable": {
+                  "tableSettings": {
+                    "type": "ResponsiveTable"
                   }
                 }
               }
