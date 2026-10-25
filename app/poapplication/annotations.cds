@@ -168,14 +168,14 @@ annotate service.OrderItems with {
                     ValueListProperty : 'productName',
                 },
                 {
-                    $Type : 'Common.ValueListParameterInOut',
+                    $Type : 'Common.ValueListParameterOut',
                     ValueListProperty : 'unitPrice',
                     LocalDataProperty : unitPrice,
                 },
             ],
-            Label : 'Item details',
+            Label : 'Item Details',
         },
-        Common.ValueListWithFixedValues : false,
+        Common.ValueListWithFixedValues : true,
 )};
 
 annotate service.Products with {

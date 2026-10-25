@@ -70,18 +70,19 @@ entity PurchaseOrders : managed {
                               on approvals.purchaseOrderId = purchaseOrderId;
 }
 
-entity OrderItems {
-    key purchaseOrderId : UUID;
-    key productId       : Integer;
-        productName     : String;
-        quantity        : Integer;
-        unitPrice       : Double;
-        itemTotal       : Double;
-        purchaseOrder   : Association to PurchaseOrders
-                              on purchaseOrder.purchaseOrderId = purchaseOrderId;
+entity OrderItems   {
+    key orderItemID : UUID;
+    purchaseOrderId : UUID;
+    productId       : Integer;
+    productName     : String;
+    quantity        : Integer;
+    unitPrice       : Double;
+    itemTotal       : Double;
+    purchaseOrder   : Association to PurchaseOrders
+                          on purchaseOrder.purchaseOrderId = purchaseOrderId;
 
-        product         : Association to one Products
-                              on product.productId = productId;
+    product         : Association to one Products
+                          on product.productId = productId;
 }
 
 entity ApprovalTable : cuid {

@@ -166,6 +166,18 @@
 										"route": "OrderItemsObjectPage"
 									}
 								}
+							},
+							"controlConfiguration": {
+								"orderItems/@com.sap.vocabularies.UI.v1.LineItem#ItemsSection": {
+									"tableSettings": {
+										"type": "ResponsiveTable"
+									}
+								},
+								"approvals/@com.sap.vocabularies.UI.v1.LineItem#ApproversTable": {
+									"tableSettings": {
+										"type": "ResponsiveTable"
+									}
+								}
 							}
 						}
 					}
