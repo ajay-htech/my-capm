@@ -64,6 +64,11 @@ annotate service.PurchaseOrders with @(
         Data : [
             {
                 $Type : 'UI.DataField',
+                Value : purchaseOrderId,
+                Label : 'purchaseOrderId',
+            },
+            {
+                $Type : 'UI.DataField',
                 Value : approvalStatus,
                 Label : 'approvalStatus',
             },
@@ -87,11 +92,6 @@ annotate service.PurchaseOrders with @(
             {
                 $Type : 'UI.DataField',
                 Value : modifiedBy,
-            },
-            {
-                $Type : 'UI.DataField',
-                Value : purchaseOrderId,
-                Label : 'purchaseOrderId',
             },
             {
                 $Type : 'UI.DataField',
@@ -168,7 +168,7 @@ annotate service.OrderItems with {
                     ValueListProperty : 'productName',
                 },
                 {
-                    $Type : 'Common.ValueListParameterOut',
+                    $Type : 'Common.ValueListParameterInOut',
                     ValueListProperty : 'unitPrice',
                     LocalDataProperty : unitPrice,
                 },
@@ -176,12 +176,110 @@ annotate service.OrderItems with {
             Label : 'Item Details',
         },
         Common.ValueListWithFixedValues : true,
+        Common.FieldControl : #Mandatory,
 )};
 
 annotate service.Products with {
     productName @(
         Common.Text : quantityPerUnit,
         Common.Text.@UI.TextArrangement : #TextLast,
+    )
+};
+
+annotate service.ApprovalTable with {
+    approver @(
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Approvers',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : approver,
+                    ValueListProperty : 'name',
+                },
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    ValueListProperty : 'mailId',
+                    LocalDataProperty : mailId,
+                },
+            ],
+            Label : 'Approvers',
+        },
+        Common.ValueListWithFixedValues : false,
+        Common.FieldControl : #Mandatory,
+)};
+
+annotate service.Approvers with {
+    name @Common.Text : Designation
+};
+
+annotate service.ApprovalTable with {
+    approvalLevel @(
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'LeavelSHelp',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : approvalLevel,
+                    ValueListProperty : 'level',
+                },
+            ],
+            Label : 'Level',
+        },
+        Common.ValueListWithFixedValues : true,
+        Common.FieldControl : #Mandatory,
+)};
+
+annotate service.LeavelSHelp with {
+    level @Common.Text : description
+};
+
+annotate service.PurchaseOrders with {
+    customerId @(
+        Common.FieldControl : #Mandatory,
+        Common.ValueList : {
+            $Type : 'Common.ValueListType',
+            CollectionPath : 'Customers',
+            Parameters : [
+                {
+                    $Type : 'Common.ValueListParameterInOut',
+                    LocalDataProperty : customerId,
+                    ValueListProperty : 'customerId',
+                },
+            ],
+            Label : 'Customers',
+        },
+        Common.ValueListWithFixedValues : true,
+    )
+};
+
+annotate service.OrderItems with {
+    itemTotal @Common.FieldControl : #ReadOnly
+};
+
+
+annotate service.OrderItems with {
+    quantity @Common.FieldControl : #Mandatory
+};
+
+annotate service.Customers with {
+    customerId @Common.Text : companyName
+};
+
+annotate service.PurchaseOrders with {
+    approvalStatus @Common.FieldControl : #ReadOnly
+};
+
+
+annotate service.ApprovalTable with {
+    remarks @Common.FieldControl : #ReadOnly
+};
+
+annotate service.PurchaseOrders with {
+    totalAmount @(
+        Common.FieldControl : #ReadOnly,
+        Measures.ISOCurrency : 'INR',
     )
 };
 

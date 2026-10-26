@@ -70,30 +70,41 @@ entity PurchaseOrders : managed {
                               on approvals.purchaseOrderId = purchaseOrderId;
 }
 
-entity OrderItems   {
-    key orderItemID : UUID;
-    purchaseOrderId : UUID;
-    productId       : Integer;
-    productName     : String;
-    quantity        : Integer;
-    unitPrice       : Double;
-    itemTotal       : Double;
-    purchaseOrder   : Association to PurchaseOrders
-                          on purchaseOrder.purchaseOrderId = purchaseOrderId;
+entity OrderItems {
+    key orderItemID     : UUID;
+        purchaseOrderId : UUID;
+        productId       : Integer;
+        productName     : String;
+        quantity        : Integer;
+        unitPrice       : Double;
+        itemTotal       : Double;
+        purchaseOrder   : Association to PurchaseOrders
+                              on purchaseOrder.purchaseOrderId = purchaseOrderId;
 
-    product         : Association to one Products
-                          on product.productId = productId;
+        product         : Association to one Products
+                              on product.productId = productId;
 }
 
+
 entity ApprovalTable : cuid {
-    approvalLevel   : Integer;
+    approvalLevel   : String;
     approver        : String;
+    mailId          : String;
     respondedOn     : DateTime;
     purchaseOrderId : UUID;
     remarks         : String(1000);
 
     purchaseOrder   : Association to one PurchaseOrders
                           on purchaseOrder.purchaseOrderId = purchaseOrderId;
+}
+entity LevelSHelp  {
+    key level : String;
+     description: String;
+}
+entity Approvers {
+    key mailId      : String;
+        name        : String;
+        Designation : String;
 }
 
 entity Attachments : cuid, managed {

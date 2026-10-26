@@ -26,5 +26,8 @@ service ProductService {
     @odata.draft.enabled
     entity PurchaseOrders as projection on mydb.PurchaseOrders;
     entity OrderItems as projection on mydb.OrderItems;
+    entity ApprovalTable as projection on mydb.ApprovalTable;
+    entity Approvers as projection on mydb.Approvers;
+    entity LeavelSHelp as projection on mydb.LevelSHelp;
     entity Attachments as projection on mydb.Attachments;
 }
