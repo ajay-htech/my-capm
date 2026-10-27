@@ -283,3 +283,37 @@ annotate service.PurchaseOrders with {
     )
 };
 
+annotate service.PurchaseOrders with @UI.Identification : [
+    {
+        $Type  : 'UI.DataFieldForAction',
+        Action : 'ProductService.sendForApproval',
+        Label  : 'Send For Approval'
+    }
+];
+
+annotate service.PurchaseOrders with actions {
+    sendForApproval @Core.OperationAvailable : (
+        $self.approvalStatus = 'Send For Approval'
+    );
+};
+
+
+annotate service.OrderItems with @(Common.SideEffects #CalculateIteamTotal: {
+    SourceProperties: ['quantity'],
+    TargetProperties: ['itemTotal'],
+});
+
+annotate service.PurchaseOrders with @(Common.SideEffects #RecalculateTotal: {
+    SourceEntities  : ['orderItems'],
+    TargetProperties: ['totalAmount']
+});
+
+
+annotate service.PurchaseOrders with actions {
+    sendForApproval @Common.SideEffects : {
+        TargetEntities : [
+            PurchaseOrders
+        ],
+       TargetProperties : ['approvalStatus']
+    };
+};
